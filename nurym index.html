@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaBox</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0d0f14;
+  color:#f3f4f6;
+}
+.container{
+  max-width:650px;
+  margin:auto;
+  padding:25px 18px 50px;
+}
+header{text-align:center;margin:25px 0 30px}
+.logo{font-size:35px;font-weight:800}
+.logo span{color:#8b5cf6}
+header p{color:#9ca3af}
+.card{
+  background:#181b23;
+  border:1px solid #282c37;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:16px;
+}
+h2{font-size:18px;margin:0 0 16px}
+.categories{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.cat{
+  padding:14px;
+  background:#222632;
+  color:#fff;
+  border:1px solid #303543;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:14px;
+}
+.cat.active{
+  border-color:#8b5cf6;
+  background:#302347;
+}
+.result{
+  min-height:155px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+.result small{color:#9ca3af}
+.idea{
+  font-size:23px;
+  line-height:1.5;
+  font-weight:bold;
+  margin:18px 0;
+}
+button{
+  cursor:pointer;
+  transition:.15s;
+}
+button:hover{filter:brightness(1.15)}
+.generate{
+  width:100%;
+  padding:16px;
+  border:0;
+  border-radius:13px;
+  background:#8b5cf6;
+  color:white;
+  font-weight:bold;
+  font-size:16px;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+}
+.actions button{
+  flex:1;
+  padding:12px;
+  background:#242834;
+  color:white;
+  border:1px solid #343a48;
+  border-radius:11px;
+}
+.favorites{color:#e5e7eb}
+.favorite-item{
+  padding:12px;
+  border-bottom:1px solid #303440;
+  line-height:1.5;
+}
+footer{
+  text-align:center;
+  color:#717784;
+  font-size:12px;
+  margin-top:30px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<header>
+  <div class="logo">💡 Idea<span>Box</span></div>
+  <p>Твоя следующая идея начинается здесь.</p>
+</header>
+
+<div class="card">
+  <h2>Выбери категорию</h2>
+  <div class="categories">
+    <button class="cat active" data-cat="video">🎥 Видео</button>
+    <button class="cat" data-cat="business">💰 Бизнес</button>
+    <button class="cat" data-cat="game">🎮 Игры</button>
+    <button class="cat" data-cat="nickname">👤 Никнеймы</button>
+    <button class="cat" data-cat="quote">✨ Цитаты</button>
+    <button class="cat" data-cat="random">🎲 Случайное</button>
+  </div>
+</div>
+
+<div class="card result">
+  <small id="categoryName">ИДЕЯ ДЛЯ ВИДЕО</small>
+  <div class="idea" id="idea">Нажми кнопку и получи новую идею!</div>
+</div>
+
+<button class="generate" id="generate">✨ Создать идею</button>
+
+<div class="actions">
+  <button id="copy">📋 Копировать</button>
+  <button id="save">❤️ Сохранить</button>
+  <button id="share">📤 Поделиться</button>
+</div>
+
+<div class="card" style="margin-top:22px">
+  <h2>❤️ Избранное</h2>
+  <div class="favorites" id="favorites">
+    <p style="color:#888">Здесь будут твои сохранённые идеи.</p>
+  </div>
+</div>
+
+<footer>IdeaBox · Генератор идей · Бесплатно</footer>
+</div>
+
+<script>
+const ideas = {
+video:[
+"Сними видео о 5 бесплатных сайтах, о которых мало кто знает.",
+"Покажи, как выглядел твой день без социальных сетей.",
+"Расскажи 3 факта о Казахстане, которые удивят зрителей.",
+"Сравни старые игры с современными.",
+"Сделай видео: 7 ошибок начинающих программистов.",
+"Расскажи, как создать сайт за 10 минут.",
+"Покажи, чему ты научился за одну неделю.",
+"Сними подборку самых полезных приложений.",
+"Расскажи историю создания известной игры.",
+"Сделай видео о необычных местах Казахстана.",
+"Покажи 5 функций телефона, о которых мало кто знает.",
+"Попробуй изучить новый навык за один день.",
+"Сравни бесплатные программы для слабых ноутбуков.",
+"Расскажи о самых необычных профессиях.",
+"Сделай подборку интересных фактов о космосе."
+],
+business:[
+"Создавай простые сайты для местных магазинов.",
+"Делай рекламные постеры для небольших заведений.",
+"Создай шаблоны расписаний для студентов.",
+"Делай обложки для YouTube-каналов.",
+"Создавай меню для кафе.",
+"Разработай простой сайт-визитку.",
+"Делай карточки товаров для интернет-магазинов.",
+"Создай шаблоны объявлений для соцсетей.",
+"Оформляй презентации для небольших проектов.",
+"Создай цифровой планировщик на неделю.",
+"Делай простые логотипы для учебных проектов.",
+"Создавай сайты-портфолио для начинающих."
+],
+game:[
+"Игра, в которой нужно угадывать страну по флагу.",
+"Игра на реакцию: нажми кнопку как можно быстрее.",
+"Викторина с вопросами о Казахстане.",
+"Игра, в которой нужно запомнить последовательность цветов.",
+"Мини-игра: угадай число от 1 до 100.",
+"Игра про сбор монет и избегание препятствий.",
+"Викторина по футбольным клубам.",
+"Игра, в которой нужно найти отличия между картинками.",
+"Словесная игра на скорость.",
+"Мини-квест с загадками."
+],
+nickname:[
+"ShadowNomad","PixelWolf","QazaqStorm",
+"NightVector","SilentOrbit","DarkPixel",
+"SteppeGhost","NeonTiger","ZeroHunter",
+"CyberNomad","FrostByte","NovaPlayer",
+"VoidRunner","AlphaSteppe","SkyRider",
+"EchoStorm","TurboFox","QuantumX",
+"BluePhantom","NextLevel","IronFalcon"
+],
+quote:[
+"Большие результаты начинаются с маленьких действий.",
+"Не обязательно быть лучшим. Достаточно стать лучше, чем вчера.",
+"Ошибки — часть обучения, а не его конец.",
+"Твоя цель становится ближе с каждым шагом.",
+"Навык создаётся практикой, а не ожиданием.",
+"Начать трудно. Продолжать — ещё важнее.",
+"Даже маленький прогресс всё равно прогресс.",
+"Не бойся быть новичком в том, что тебе интересно.",
+"Сначала учись. Потом улучшай. Потом создавай.",
+"Время, потраченное на обучение, не пропадает."
+]
+};
+
+const names={
+video:"ИДЕЯ ДЛЯ ВИДЕО",
+business:"ИДЕЯ ДЛЯ ЗАРАБОТКА",
+game:"ИДЕЯ ДЛЯ ИГРЫ",
+nickname:"ТВОЙ НИКНЕЙМ",
+quote:"ЦИТАТА",
+random:"СЛУЧАЙНАЯ ИДЕЯ"
+};
+
+let category="video";
+let currentIdea="";
+let favorites=JSON.parse(localStorage.getItem("ideabox_favs")||"[]");
+
+const ideaEl=document.getElementById("idea");
+const catName=document.getElementById("categoryName");
+const favEl=document.getElementById("favorites");
+
+function getRandom(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function generate(){
+  let list=ideas[category];
+  if(category==="random"){
+    list=[...ideas.video,...ideas.business,
+           ...ideas.game,...ideas.nickname,...ideas.quote];
+  }
+  currentIdea=getRandom(list);
+  ideaEl.textContent=currentIdea;
+  catName.textContent=names[category];
+}
+
+document.querySelectorAll(".cat").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".cat").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    category=btn.dataset.cat;
+    generate();
+  });
+});
+
+document.getElementById("generate").onclick=generate;
+
+document.getElementById("copy").onclick=async()=>{
+  if(!currentIdea)return;
+  try{
+    await navigator.clipboard.writeText(currentIdea);
+    alert("Скопировано!");
+  }catch{
+    alert("Не удалось скопировать. Выдели текст вручную.");
+  }
+};
+
+document.getElementById("save").onclick=()=>{
+  if(!currentIdea)return;
+  if(favorites.includes(currentIdea)){
+    alert("Эта идея уже сохранена.");
+    return;
+  }
+  favorites.unshift(currentIdea);
+  localStorage.setItem("ideabox_favs",JSON.stringify(favorites));
+  renderFavorites();
+};
+
+document.getElementById("share").onclick=async()=>{
+  const text="💡 Идея от IdeaBox:\n"+currentIdea+
+    "\nПопробуй IdeaBox — генератор идей!";
+  if(navigator.share){
+    try{await navigator.share({title:"IdeaBox",text:text})}
+    catch(e){}
+  }else{
+    try{
+      await navigator.clipboard.writeText(text);
+      alert("Текст для публикации скопирован!");
+    }catch{
+      alert(text);
+    }
+  }
+};
+
+function renderFavorites(){
+  if(!favorites.length){
+    favEl.innerHTML='<p style="color:#888">Здесь будут твои сохранённые идеи.</p>';
+    return;
+  }
+  favEl.innerHTML="";
+  favorites.forEach((item,index)=>{
+    const div=document.createElement("div");
+    div.className="favorite-item";
+    div.textContent="💡 "+item;
+    div.title="Нажми, чтобы удалить";
+    div.style.cursor="pointer";
+    div.onclick=()=>{
+      favorites.splice(index,1);
+      localStorage.setItem("ideabox_favs",JSON.stringify(favorites));
+      renderFavorites();
+    };
+    favEl.appendChild(div);
+  });
+}
+
+generate();
+renderFavorites();
+</script>
+</body>
+</html>
